@@ -7,7 +7,7 @@ const GET = (req, res, next) => {
 	let users = req.select('users')
 
 	if(userId) {
-		const userFind = users.find(user => user.userId == userId)
+		const user = users.find(user => user.userId == userId)
 		return res.json(user)
 	}
 	else { 

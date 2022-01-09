@@ -1,4 +1,9 @@
+const dotenv = require('dotenv')
 const PORT = process.env.PORT || 5000
+
+dotenv.config()
+
+const TOKEN_TIME = 86400
 
 const PAGINATION = {
 	page: 1,
@@ -6,8 +11,8 @@ const PAGINATION = {
 }
 
 
-
 module.exports = {
 	PORT,
-	PAGINATION
+	PAGINATION,
+	TOKEN_TIME
 }
