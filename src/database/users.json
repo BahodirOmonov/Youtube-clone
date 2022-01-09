@@ -1,0 +1,15 @@
+[
+	{
+		"userId": 1, 
+		"username": "Bahodir", 
+		"password": "66b75cf3083ed91da13750340c912e262202a5f0bfc81e6bb94230e9b80a036e",
+		"userUrl": "/images/avatar.jpg"
+	},
+
+	{
+		"userId": 2, 
+		"username": "Bahodir", 
+		"password": "66b75cf3083ed91da13750340c912e262202a5f0bfc81e6bb94230e9b80a036e",
+		"userUrl": "/images/avatar.jpg"
+	}
+]
