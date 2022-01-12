@@ -1,3 +1,6 @@
+const fs = require('fs')
+const path = require('path')
+
 const GET = (req, res, next) => {
 	try	{
 		const {PAGINATION} = require('../../config.js')
@@ -29,7 +32,49 @@ const GET = (req, res, next) => {
 
 const POST = (req, res, next) => {
 	try	{
-		//...
+		const {videoTitle} = req.body
+
+		if(!videoTitle) {
+			throw new Error("videoTitle'ga qiymat kiriting!")
+		}
+
+		if(!req.file) {
+			throw new Error("Video mavjud emas!")
+		}
+
+		const {originalname, mimetype, buffer, size} = req.file
+
+		if(size > (200 * 1024 * 1024)) {
+			throw new Error("Video hajmi 200MB dan kichik bo'lishi kerak!")
+		}
+
+		if(mimetype != 'video/mp4') {
+			throw new Error("Video faqat mp4 bo'lishi kerak!")
+		}
+
+		const videos = req.select("videos")
+
+		const videoName = Date.now() + originalname.replace(/\s/g, "")
+
+		const newVideo = {
+			videoId: videos.length ? videos[videos.length - 1].videoId + 1: 1,
+			userId: req.userId,
+			videoTitle: videoName,
+			videoUrl: '/videos/' + videoName,
+			videoSize: Math.ceil(size / 1024 / 1024),
+			videoDate: new Date()
+		}
+
+		videos.push(newVideo)
+
+		req.insert("videos", videos)
+
+		fs.writeFileSync(path.join(process.cwd(), 'files', 'videos', videoName), buffer)
+
+		res.status(201).json({
+			message: "Video muvaffaqiyatli yozildi!",
+			video: newVideo
+		})
 		
 	} catch(error) {
 		return next(error)

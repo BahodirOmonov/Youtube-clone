@@ -1,11 +1,14 @@
 const router = require('express').Router()
+const multer = require('multer')
 const videoController = require('../controllers/video.js')
+const tokenMiddleware = require('../middlewares/checkToken.js')
+const videoUpload = multer()
 
 
 router.get('/', videoController.GET)
 router.get('/:videoId', videoController.GET)
-router.post('/', videoController.POST)
-router.put('/', videoController.PUT)
-router.delete('/', videoController.DELETE)
+router.post('/', tokenMiddleware, videoUpload.single('video'), videoController.POST)
+router.put('/', tokenMiddleware, videoController.PUT)
+router.delete('/', tokenMiddleware, videoController.DELETE)
 
 module.exports = router

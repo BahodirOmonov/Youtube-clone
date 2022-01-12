@@ -1,19 +1,10 @@
 [
-	{
-		"videoId": 1,
-		"userId": 1,
-		"videoTitle": "Abdukarim Mirzayev",
-		"videoUrl": "/videos/abdukarim.mp4",
-		"videoSize": 8,
-		"videoDate": "2022-01-09T04:44:51.398Z"
-	},
-
-	{
-		"videoId": 2,
-		"userId": 2,
-		"videoTitle": "Muhammadali Eshonqulov",
-		"videoUrl": "/videos/muhammadali.mp4",
-		"videoSize": 12,
-		"videoDate": "2022-01-09T04:44:51.398Z"
-	}
+    {
+        "videoId": 1,
+        "userId": 1,
+        "videoTitle": "1641983827590Kunliksabr_@AbdukarimMirzayev[G_sBpbS09X0].mp4",
+        "videoUrl": "/videos/1641983827590Kunliksabr_@AbdukarimMirzayev[G_sBpbS09X0].mp4",
+        "videoSize": 2,
+        "videoDate": "2022-01-12T10:37:07.590Z"
+    }
 ]
