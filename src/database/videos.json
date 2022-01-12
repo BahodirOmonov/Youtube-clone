@@ -2,7 +2,7 @@
 	{
 		"videoId": 1,
 		"userId": 1,
-		"title": "Abdukarim Mirzayev",
+		"videoTitle": "Abdukarim Mirzayev",
 		"videoUrl": "/videos/abdukarim.mp4",
 		"videoSize": 8,
 		"videoDate": "2022-01-09T04:44:51.398Z"
@@ -11,7 +11,7 @@
 	{
 		"videoId": 2,
 		"userId": 2,
-		"title": "Muhammadali Eshonqulov",
+		"videoTitle": "Muhammadali Eshonqulov",
 		"videoUrl": "/videos/muhammadali.mp4",
 		"videoSize": 12,
 		"videoDate": "2022-01-09T04:44:51.398Z"

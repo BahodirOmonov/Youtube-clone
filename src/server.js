@@ -13,9 +13,11 @@ app.use(fileUpload.single("image"))
 
 const userRouter = require('./routes/user.js')
 const authRouter = require('./routes/auth.js')
+const videoRouter = require('./routes/video.js')
 
 app.use('/users', userRouter)
 app.use('/auth', authRouter)
+app.use('/videos', videoRouter)
 
 
 app.use((error, req, res, next) => {
