@@ -1,26 +1,20 @@
 [
     {
         "userId": 1,
-        "username": "Bahodir",
-        "password": "66b75cf3083ed91da13750340c912e262202a5f0bfc81e6bb94230e9b80a036e",
-        "userUrl": "/images/avatar.jpg"
-    },
-    {
-        "userId": 2,
-        "username": "Dostonbek",
-        "password": "66b75cf3083ed91da13750340c912e262202a5f0bfc81e6bb94230e9b80a036e",
-        "userUrl": "/images/avatar.jpg"
-    },
-    {
-        "userId": 3,
         "username": "Xurshidbek",
         "password": "66b75cf3083ed91da13750340c912e262202a5f0bfc81e6bb94230e9b80a036e",
         "userUrl": "/image/1641971473912Screenshotfrom2022-01-0921-24-19.png"
     },
     {
-        "userId": 4,
+        "userId": 2,
         "username": "Begzod",
         "password": "66b75cf3083ed91da13750340c912e262202a5f0bfc81e6bb94230e9b80a036e",
         "userUrl": "/image/1641972003198Screenshotfrom2022-01-0921-24-19.png"
+    },
+    {
+        "userId": 3,
+        "username": "Shoxrux",
+        "password": "66b75cf3083ed91da13750340c912e262202a5f0bfc81e6bb94230e9b80a036e",
+        "userUrl": "/image/1642049674645Screenshotfrom2022-01-0921-24-19.png"
     }
 ]

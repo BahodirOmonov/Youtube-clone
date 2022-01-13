@@ -7,6 +7,7 @@ const videoUpload = multer()
 
 router.get('/', videoController.GET)
 router.get('/:videoId', videoController.GET)
+router.get('/download/videos/:videoUrl', videoController.DOWNLOAD)
 router.post('/', tokenMiddleware, videoUpload.single('video'), videoController.POST)
 router.put('/', tokenMiddleware, videoController.PUT)
 router.delete('/', tokenMiddleware, videoController.DELETE)

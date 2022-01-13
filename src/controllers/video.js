@@ -9,17 +9,30 @@ const GET = (req, res, next) => {
 		const { page = PAGINATION.page, limit = PAGINATION.limit, search, userId } = req.query
 
 		let videos = req.select('videos')
+		let users = req.select('users')
 
 		if(videoId) {
-			return res.json(videos.find(video => video.videoId == videoId))
+			return res.json(videos.find(video => {
+				if(video.videoId == videoId) {
+					video.user = users.find(user => user.userId == video.userId)
+					video.user ? delete video.user.password : video.user
+					return video.user
+				}
+				return false
+			}))
 		}
-
-		videos = videos.slice(page * limit - limit, page * limit)
 
 		videos = videos.filter(video => {
 			let userFilter = userId ? video.userId == userId : true
 			let searchFilter = search ? video.videoTitle.toLowerCase().includes(search.trim().toLowerCase()) : true
 			return userFilter && searchFilter
+		})
+
+		videos = videos.slice(page * limit - limit, page * limit)
+		videos = videos.filter(video => {
+			video.user = users.find(user => user.userId == video.userId)
+			video.user ? delete video.user.password : video.user
+			return video.user 
 		})
 
 		return res.json(videos)
@@ -33,6 +46,7 @@ const GET = (req, res, next) => {
 const POST = (req, res, next) => {
 	try	{
 		const {videoTitle} = req.body
+		const agent = req.headers['user-agent']
 
 		if(!videoTitle) {
 			throw new Error("videoTitle'ga qiymat kiriting!")
@@ -40,6 +54,10 @@ const POST = (req, res, next) => {
 
 		if(!req.file) {
 			throw new Error("Video mavjud emas!")
+		}
+
+		if(agent != req.agent) {
+			throw new Error("Qaytadan login qiling!")
 		}
 
 		const {originalname, mimetype, buffer, size} = req.file
@@ -59,7 +77,7 @@ const POST = (req, res, next) => {
 		const newVideo = {
 			videoId: videos.length ? videos[videos.length - 1].videoId + 1: 1,
 			userId: req.userId,
-			videoTitle: videoName,
+			videoTitle,
 			videoUrl: '/videos/' + videoName,
 			videoSize: Math.ceil(size / 1024 / 1024),
 			videoDate: new Date()
@@ -67,11 +85,11 @@ const POST = (req, res, next) => {
 
 		videos.push(newVideo)
 
-		req.insert("videos", videos)
-
 		fs.writeFileSync(path.join(process.cwd(), 'files', 'videos', videoName), buffer)
 
-		res.status(201).json({
+		req.insert("videos", videos)
+
+		return res.status(201).json({
 			message: "Video muvaffaqiyatli yozildi!",
 			video: newVideo
 		})
@@ -83,7 +101,37 @@ const POST = (req, res, next) => {
 
 const PUT = (req, res, next) => {
 	try	{
-		//...
+		const { videoTitle, videoId } = req.body
+		const agent = req.headers['user-agent']
+
+		if(!videoTitle || !videoId) {
+			throw new Error("videoTitle yoki videoId kiritilmagan!")
+		}
+
+		if(videoTitle.length > 50) {
+			throw new Error("videoTitle uzunligi 50 ta belgidan kichik bo'lishi kerak!")
+		}
+
+		if(agent != req.agent) {
+			throw new Error("Qaytadan login qiling!")
+		}
+
+		const videos = req.select('videos')
+
+		const found = videos.find(video => video.videoId == videoId && video.userId == req.userId)
+
+		if(!found) {
+			throw new Error("Video topilmadi!")
+		}
+
+		found.videoTitle = videoTitle
+
+		req.insert('videos', videos)
+
+		return res.status(201).json({
+			message: "Video title o'zgartirildi!",
+			video: found
+		})
 		
 	} catch(error) {
 		return next(error)
@@ -92,8 +140,47 @@ const PUT = (req, res, next) => {
 
 const DELETE = (req, res, next) => {
 	try	{
-		//...
+		const { videoId } = req.body
+		const agent = req.headers['user-agent']
+
+		if(!videoId) {
+			throw new Error("videoId kiritilmagan!")
+		}
+
+		if(agent != req.agent) {
+			throw new Error("Qaytadan login qiling!")
+		}
+
+		const videos = req.select('videos')
+
+		const foundIndex = videos.findIndex(video => video.videoId == videoId && video.userId == req.userId)
+
+		if(foundIndex == -1) {
+			throw new Error("Video topilmadi!")
+		}
+
+		[ deletedVideo ] = videos.splice(foundIndex, 1)
+
+		fs.unlinkSync(path.join(process.cwd(), 'files', deletedVideo.videoUrl))
+
+		req.insert('videos', videos)
+
+
+		return res.status(201).json({
+			message: "Video o'chirildi!",
+			video: deletedVideo
+		})
 		
+	} catch(error) {
+		return next(error)
+	}
+}
+
+const DOWNLOAD = (req, res, next) => {
+	try {
+		const { videoUrl } = req.params
+		return res.download(path.join(process.cwd(), 'files', "videos", videoUrl))
+
 	} catch(error) {
 		return next(error)
 	}
@@ -104,5 +191,6 @@ module.exports = {
 	GET,
 	POST,
 	PUT,
-	DELETE
+	DELETE,
+	DOWNLOAD
 }
